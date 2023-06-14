@@ -4,6 +4,7 @@ import pytest
 import time
 import os
 import re
+import glob
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -11,19 +12,24 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from datetime import datetime
 
+# Global Vars
+download_base_directory = 'D:\\POCs\\DownloadFiles\\OutPutFiles\\'
+
 def read_test_data_from_csv():
     test_data = []
-    with open('./InputData/IData1.csv', newline='') as csvfile:
+    with open('./InputData/IData.csv', newline='') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
         next(data)  # skip header row
         for row in data:
             test_data.append(row)
     return test_data
 
+
+
 @pytest.mark.parametrize("TestID, URL, Resource", read_test_data_from_csv())
 def test_download_files(TestID, URL, Resource):
  # Set the download directory path
-    download_base_directory = 'D:\\POCs\\DownloadFiles\\OutPutFiles\\'
+    
     download_directory = download_base_directory + TestID
     #download_directory = os.path.join(download_directory_base, Test_ID) 
     if not os.path.exists(download_directory):
@@ -71,7 +77,7 @@ def test_download_files(TestID, URL, Resource):
     #print (TestID)
     # Close the browser
     driver.quit()
-    write_to_file(download_base_directory+TestID+".txt", log_info)
+    write_to_file(".\\Logs\\"+TestID+".txt", log_info)
 
 
 def wait_for_file(file_name, directory_path, timeout=120):
@@ -98,3 +104,34 @@ def get_time_stamp():
     timestamp = datetime.now()
     timestamp_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
     return timestamp_str
+
+
+
+@pytest.fixture(scope="session", autouse=True)
+def combine_logs(request):
+    yield
+    print("Combined Logs:")
+    get_combined_txt_content("./Logs", "Log.csv")
+    
+
+def get_combined_txt_content(folder_path, output_file):
+    combined_content = ""
+
+    # Get a list of all .txt files in the folder
+    txt_files = glob.glob(os.path.join(folder_path, "*.txt"))
+
+    # Iterate over each .txt file
+    for file_path in txt_files:
+        with open(file_path, "r") as file:
+            content = file.read()
+            combined_content += content + "\n"  # Concatenate the content of each file
+
+    # Remove blank lines
+    combined_content = "\n".join(line for line in combined_content.split("\n") if line.strip())
+
+    # Construct the output file's full path
+    output_path = os.path.join(folder_path, output_file)
+
+    # Write the combined content to the output file
+    with open(output_path, "w") as file:
+        file.write(combined_content)
