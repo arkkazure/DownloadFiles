@@ -14,10 +14,11 @@ from datetime import datetime
 
 # Global Vars
 download_base_directory = 'D:\\POCs\\DownloadFiles\\OutPutFiles\\'
+input_dataFile = './InputData/IData.csv'
 
 def read_test_data_from_csv():
     test_data = []
-    with open('./InputData/IData.csv', newline='') as csvfile:
+    with open(input_dataFile, newline='') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
         next(data)  # skip header row
         for row in data:
@@ -60,7 +61,7 @@ def test_download_files(TestID, URL, Resource):
     links = driver.find_elements(By.XPATH, "//a[contains(text(), '.txt')]")
     log_info=""
     if len(links) == 0:
-        log_info = log_info+TestID+","+get_time_stamp()+", No Attachments Found"
+        log_info = log_info+TestID+","+get_time_stamp()+",No Attachments Found"
     else:
         
         for link in links:
@@ -70,9 +71,9 @@ def test_download_files(TestID, URL, Resource):
             link.click()
             #time.sleep(2)
             if wait_for_file(link_text, download_directory , 30 ):
-                log_info = log_info+ TestID+","+get_time_stamp()+",Sucessful Download: "+link_text+"\n"
+                log_info = log_info+ TestID+","+get_time_stamp()+",Sucessful Download,"+link_text+"\n"
             else:
-                log_info = log_info+ TestID+","+get_time_stamp()+", Failed to Download : "+link_text+"\n"   
+                log_info = log_info+ TestID+","+get_time_stamp()+",Failed to Download,"+link_text+"\n"   
    
     #print (TestID)
     # Close the browser
