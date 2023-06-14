@@ -45,7 +45,7 @@ def test_download_files(TestID, URL, Resource):
     'safebrowsing.enabled': True
     })
 
-    #chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--headless')
     # Create the WebDriver with the configured options
     driver = webdriver.Chrome(options=chrome_options)
    
