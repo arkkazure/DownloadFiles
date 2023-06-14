@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 def read_test_data_from_csv():
     test_data = []
-    with open('./InputData/Idata1.csv', newline='') as csvfile:
+    with open('./InputData/IData.csv', newline='') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
         next(data)  # skip header row
         for row in data:
@@ -36,7 +36,7 @@ def test_download_files(TestID, URL, Resource):
     'safebrowsing.enabled': True
     })
 
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
     # Create the WebDriver with the configured options
     driver = webdriver.Chrome(options=chrome_options)
    
@@ -45,19 +45,20 @@ def test_download_files(TestID, URL, Resource):
     driver.set_page_load_timeout(60)
 
     driver.get(URL)
-    #time.sleep(5)
+    
     wait = WebDriverWait(driver, 10)
-    linkw = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), '.xml')]")))
-    links = driver.find_elements(By.XPATH, "//a[contains(text(), '.xml')]")
+    linkw = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), '.txt')]")))
+    #time.sleep(2)
+    links = driver.find_elements(By.XPATH, "//a[contains(text(), '.txt')]")
     for link in links:
         link_text = link.text
-        print (f"link text: {link_text}")
+        print (f"Test ID : {TestID}  -- Link text: {link_text}")
         link.click()
-        #time.sleep(2)
+        time.sleep(2)
         wait_for_file(link_text, download_directory , 30 )
 
    
-    print (TestID)
+    #print (TestID)
     # Close the browser
     driver.quit()
 
