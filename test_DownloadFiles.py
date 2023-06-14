@@ -54,7 +54,7 @@ def test_download_files(TestID, URL, Resource):
         link_text = link.text
         print (f"Test ID : {TestID}  -- Link text: {link_text}")
         link.click()
-        time.sleep(2)
+        #time.sleep(2)
         wait_for_file(link_text, download_directory , 30 )
 
    
