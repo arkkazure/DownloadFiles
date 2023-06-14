@@ -9,10 +9,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from datetime import datetime
 
 def read_test_data_from_csv():
     test_data = []
-    with open('./InputData/IData.csv', newline='') as csvfile:
+    with open('./InputData/IData1.csv', newline='') as csvfile:
         data = csv.reader(csvfile, delimiter=',')
         next(data)  # skip header row
         for row in data:
@@ -22,7 +23,8 @@ def read_test_data_from_csv():
 @pytest.mark.parametrize("TestID, URL, Resource", read_test_data_from_csv())
 def test_download_files(TestID, URL, Resource):
  # Set the download directory path
-    download_directory = 'D:\\POCs\\DownloadFiles\\OutPutFiles\\' +TestID
+    download_base_directory = 'D:\\POCs\\DownloadFiles\\OutPutFiles\\'
+    download_directory = download_base_directory + TestID
     #download_directory = os.path.join(download_directory_base, Test_ID) 
     if not os.path.exists(download_directory):
         os.makedirs(download_directory)
@@ -46,25 +48,30 @@ def test_download_files(TestID, URL, Resource):
 
     driver.get(URL)
     
-    wait = WebDriverWait(driver, 10)
-    linkw = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), '.txt')]")))
+    #wait = WebDriverWait(driver, 10)
+    #linkw = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), '.txt')]")))
     #time.sleep(2)
     links = driver.find_elements(By.XPATH, "//a[contains(text(), '.txt')]")
-    for link in links:
-        link_text = link.text
-        print (f"Test ID : {TestID}  -- Link text: {link_text}")
-        link.click()
-        #time.sleep(2)
-        wait_for_file(link_text, download_directory , 30 )
-
+    log_info=""
+    if len(links) == 0:
+        log_info = log_info+TestID+","+get_time_stamp()+", No Attachments Found"
+    else:
+        
+        for link in links:
+            link_text = link.text
+            print (f"Test ID : {TestID}  -- Link text: {link_text}")
+            log_info
+            link.click()
+            #time.sleep(2)
+            if wait_for_file(link_text, download_directory , 30 ):
+                log_info = log_info+ TestID+","+get_time_stamp()+",Sucessful Download: "+link_text+"\n"
+            else:
+                log_info = log_info+ TestID+","+get_time_stamp()+", Failed to Download : "+link_text+"\n"   
    
     #print (TestID)
     # Close the browser
     driver.quit()
-
-
-
-
+    write_to_file(download_base_directory+TestID+".txt", log_info)
 
 
 def wait_for_file(file_name, directory_path, timeout=120):
@@ -81,3 +88,13 @@ def wait_for_file(file_name, directory_path, timeout=120):
 
     print(f"File '{file_name}' found in directory: {directory_path}")
     return True
+
+
+def write_to_file(file_path, content):
+    with open(file_path, "w") as file:
+        file.write(content)
+
+def get_time_stamp():
+    timestamp = datetime.now()
+    timestamp_str = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    return timestamp_str
