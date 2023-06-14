@@ -14,7 +14,7 @@ from datetime import datetime
 
 # Global Vars
 download_base_directory = 'D:\\POCs\\DownloadFiles\\OutPutFiles\\'
-input_dataFile = './InputData/IData.csv'
+input_dataFile = '../InputData/IData.csv'
 
 def read_test_data_from_csv():
     test_data = []
@@ -78,7 +78,7 @@ def test_download_files(TestID, URL, Resource):
     #print (TestID)
     # Close the browser
     driver.quit()
-    write_to_file(".\\Logs\\"+TestID+".txt", log_info)
+    write_to_file("..\\Logs\\"+TestID+".txt", log_info)
 
 
 def wait_for_file(file_name, directory_path, timeout=120):
@@ -112,7 +112,7 @@ def get_time_stamp():
 def combine_logs(request):
     yield
     print("Combined Logs:")
-    get_combined_txt_content("./Logs", "Log.csv")
+    get_combined_txt_content("../Logs", "Log.csv")
     
 
 def get_combined_txt_content(folder_path, output_file):
