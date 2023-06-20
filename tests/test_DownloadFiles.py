@@ -14,7 +14,9 @@ from datetime import datetime
 
 # Global Vars
 download_base_directory = 'D:\\POCs\\DownloadFiles\\OutPutFiles\\'
-input_dataFile = '../InputData/IData.csv'
+input_dataFile = '../InputData/IData1.csv'
+
+
 
 def read_test_data_from_csv():
     test_data = []
@@ -45,7 +47,7 @@ def test_download_files(TestID, URL, Resource):
     'safebrowsing.enabled': True
     })
 
-    chrome_options.add_argument('--headless')
+    #chrome_options.add_argument('--headless')
     # Create the WebDriver with the configured options
     driver = webdriver.Chrome(options=chrome_options)
    
