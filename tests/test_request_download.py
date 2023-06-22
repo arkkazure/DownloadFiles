@@ -4,7 +4,7 @@ import requests
 
 def test_down():
     url = "https://the-internet.herokuapp.com/download/boy.jpg"
-    file_path = "D:\\POCs\\boy.jpg"
+    file_path = "boy.jpg"
 
     response = requests.get(url)
     response = requests.get(url, auth=('user', 'sdsd'))

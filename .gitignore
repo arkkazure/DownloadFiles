@@ -3,3 +3,9 @@ __pycache__/test_DownloadFiles.cpython-310-pytest-7.1.2.pyc
 Logs/
 OutputFiles/
 tests/__pycache__/test_DownloadFiles.cpython-310-pytest-7.1.2.pyc
+Tests/__pycache__/test_Utils.cpython-310-pytest-7.1.2.pyc
+Tests/__pycache__/test_DownloadFilesCookies.cpython-310-pytest-7.1.2.pyc
+tests/__pycache__/test_request_download.cpython-310-pytest-7.1.2.pyc
+Tests/__pycache__/test_DeleteLogsDownloads.cpython-310-pytest-7.1.2.pyc
+tests/__pycache__/test_request_download.cpython-310-pytest-7.1.2.pyc
+tests/__pycache__/test_request_download.cpython-310-pytest-7.1.2.pyc
